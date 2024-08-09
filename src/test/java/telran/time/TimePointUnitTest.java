@@ -113,27 +113,31 @@ public class TimePointUnitTest {
         // get ready
         TimePoint timePoint1 = new TimePoint(12, TimeUnit.SECOND);
         TimePoint timePoint2 = new TimePoint(48, TimeUnit.MINUTE);
-        TimePoint timePoint3 = new TimePoint(24, TimeUnit.HOUR);
+        TimePoint timePoint3 = new TimePoint(48, TimeUnit.MINUTE);
+        TimePoint timePoint4 = new TimePoint(24, TimeUnit.HOUR);
         TimePoint[] timePoints = {
-                timePoint2, timePoint1, timePoint3
+                timePoint2, timePoint1, timePoint3, timePoint4
         };
         FutureProximityAdjuster futureProximityAdjuster = new FutureProximityAdjuster(timePoints);
 
         // nearest is 12 Seconds
         TimePoint timePointInFuture = new TimePoint(11, TimeUnit.SECOND);
-        TimePoint expectedTimePoint = new TimePoint(12, TimeUnit.SECOND);
         TimePoint findResult = futureProximityAdjuster.adjust(timePointInFuture);
-        assertEquals(expectedTimePoint, findResult);
+        assertEquals(timePoint1, findResult);
 
-        // nearest is 48 Minutes
-        TimePoint timePointInFuture2 = new TimePoint(15, TimeUnit.SECOND);
-        TimePoint expectedTimePoint2 = new TimePoint(48, TimeUnit.MINUTE);
+        // nearest is 48 Minutes - Duplicates
+        TimePoint timePointInFuture2 = new TimePoint(47, TimeUnit.MINUTE);
         TimePoint findResult2 = futureProximityAdjuster.adjust(timePointInFuture2);
-        assertEquals(expectedTimePoint2, findResult2);
+        assertEquals(timePoint3, findResult2);
+
+        // TimeUnit mismatch test
+        TimePoint timePointInFuture3 = new TimePoint(15, TimeUnit.SECOND);
+        TimePoint findResult3 = futureProximityAdjuster.adjust(timePointInFuture3);
+        assertEquals(null, findResult3);
 
         // no points in future
-        TimePoint timePointInFuture3 = new TimePoint(25, TimeUnit.HOUR);
-        TimePoint notFindResult = futureProximityAdjuster.adjust(timePointInFuture3);
+        TimePoint timePointInFuture4 = new TimePoint(25, TimeUnit.HOUR);
+        TimePoint notFindResult = futureProximityAdjuster.adjust(timePointInFuture4);
         assertEquals(null, notFindResult);
     }
 }
