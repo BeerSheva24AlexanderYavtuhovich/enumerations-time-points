@@ -10,9 +10,8 @@ public class TimePoint implements Comparable<TimePoint> {
     }
 
     @Override
-    public int compareTo(TimePoint o) {
-        // TODO
-        throw new UnsupportedOperationException("Unimplemented method 'compareTo'");
+    public int compareTo(TimePoint arg0) {
+        return Float.compare(this.convert(TimeUnit.SECOND).getAmount(), arg0.convert(TimeUnit.SECOND).getAmount());
     }
 
     public float getAmount() {
@@ -25,16 +24,14 @@ public class TimePoint implements Comparable<TimePoint> {
 
     @Override
     public boolean equals(Object obj) {
-        // TODO
-        return false;
-
+        return this == obj || (obj instanceof TimePoint &&
+                Float.compare(amount, ((TimePoint) obj).amount) == 0 &&
+                timeUnit == ((TimePoint) obj).timeUnit);
     }
 
     public TimePoint convert(TimeUnit timeUnit) {
-        // TODO
-        // returns new TimePoint object equaled to the "this" object but
-        // with a given timeUnit
-        return null;
+        Float newAmount = this.amount * this.getTimeUnit().getValueOfSeconds() / timeUnit.getValueOfSeconds();
+        return new TimePoint(newAmount, timeUnit);
     }
 
     public TimePoint with(TimePointAdjuster adjuster) {
