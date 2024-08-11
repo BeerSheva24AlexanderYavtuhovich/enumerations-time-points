@@ -14,7 +14,7 @@ public enum TimeUnit {
     }
 
     public float between(TimePoint p1, TimePoint p2) {
-        return (p2.getAmount() * p2.getTimeUnit().getValueOfSeconds()
-                - p1.getAmount() * p1.getTimeUnit().getValueOfSeconds()) / this.valueOfSeconds;
+        return p2.convert(this).getAmount()
+                - p1.convert(this).getAmount();
     }
 }
